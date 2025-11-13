@@ -1,0 +1,84 @@
+@HangfireJobsSys.WebApi_HostAddress = http://localhost:5019
+
+# 1. 用户注册
+POST {{HangfireJobsSys.WebApi_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "userName": "admin",
+  "password": "Admin@123",
+  "email": "admin@example.com"
+}
+
+###
+
+# 2. 用户登录
+POST {{HangfireJobsSys.WebApi_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "userName": "admin",
+  "password": "Admin@123"
+}
+
+# 登录成功后，将返回的token复制到下面的变量中
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+###
+
+# 3. 创建任务
+POST {{HangfireJobsSys.WebApi_HostAddress}}/api/jobs
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "示例定时任务",
+  "description": "这是一个测试任务",
+  "jobType": "HangfireJobsSys.Application.Jobs.SampleJob",
+  "parameters": "{\"message\":\"Hello Hangfire\"}",
+  "cronExpression": "0 * * * *",
+  "isEnabled": true
+}
+
+###
+
+# 4. 获取任务列表
+GET {{HangfireJobsSys.WebApi_HostAddress}}/api/jobs
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+# 5. 获取单个任务
+GET {{HangfireJobsSys.WebApi_HostAddress}}/api/jobs/{jobId}
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+# 6. 更新任务
+PUT {{HangfireJobsSys.WebApi_HostAddress}}/api/jobs/{jobId}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "更新后的任务名称",
+  "description": "更新后的任务描述",
+  "jobType": "HangfireJobsSys.Application.Jobs.SampleJob",
+  "parameters": "{\"message\":\"Updated Message\"}",
+  "status": 1
+}
+
+###
+
+# 7. 删除任务
+DELETE {{HangfireJobsSys.WebApi_HostAddress}}/api/jobs/{jobId}
+Authorization: Bearer {{token}}
+
+###
+
+# 8. 立即执行任务
+POST {{HangfireJobsSys.WebApi_HostAddress}}/api/jobs/{jobId}/execute
+Authorization: Bearer {{token}}
+
+###
