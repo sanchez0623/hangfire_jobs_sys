@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HangfireJobsSys.Domain.Entities;
+using HangfireJobsSys.Domain.Enums;
 using HangfireJobsSys.Domain.Repositories;
 using HangfireJobsSys.Domain.Services;
 using Microsoft.Extensions.Logging;

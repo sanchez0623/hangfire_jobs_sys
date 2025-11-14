@@ -9,6 +9,7 @@ using HangfireJobsSys.Infrastructure.Services.JobExecutors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -49,7 +50,15 @@ namespace HangfireJobsSys.Infrastructure
             services.AddScoped<IDatabaseService, DatabaseService>();
             
             // 注册性能监控和增强日志服务
-            services.AddSingleton<IPerformanceMonitoringService, PerformanceMonitoringService>();
+            services.AddScoped<IPerformanceMonitoringService, PerformanceMonitoringService>(sp =>
+            {
+                var dbContext = sp.GetRequiredService<HangfireJobsSysDbContext>();
+                var logger = sp.GetRequiredService<ILogger<PerformanceMonitoringService>>();
+                var options = new PerformanceMonitoringOptions();
+                configuration.GetSection("PerformanceMonitoring").Bind(options);
+                
+                return new PerformanceMonitoringService(dbContext, logger, options);
+            });
             services.AddScoped<IEnhancedLoggingService, EnhancedLoggingService>();
             
             // 获取连接字符串

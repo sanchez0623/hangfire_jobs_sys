@@ -79,6 +79,8 @@ namespace HangfireJobsSys.WebApi.Configurations
             // 添加授权服务
             services.AddAuthorization();
 
+            // 性能监控服务已在Infrastructure.DependencyInjection中配置
+
             return services;
         }
 

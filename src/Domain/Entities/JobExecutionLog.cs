@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using HangfireJobsSys.Domain.Enums;
 
 namespace HangfireJobsSys.Domain.Entities
 {
@@ -143,29 +144,5 @@ namespace HangfireJobsSys.Domain.Entities
         }
     }
 
-    /// <summary>
-    /// 执行状态枚举
-    /// </summary>
-    public enum ExecutionStatus
-    {
-        /// <summary>
-        /// 运行中
-        /// </summary>
-        Running = 0,
 
-        /// <summary>
-        /// 成功
-        /// </summary>
-        Succeeded = 1,
-
-        /// <summary>
-        /// 失败
-        /// </summary>
-        Failed = 2,
-
-        /// <summary>
-        /// 取消
-        /// </summary>
-        Canceled = 3
-    }
 }

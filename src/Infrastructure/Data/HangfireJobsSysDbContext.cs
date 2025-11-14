@@ -25,6 +25,11 @@ namespace HangfireJobsSys.Infrastructure.Data
         public DbSet<JobExecutionLog> JobExecutionLogs { get; set; }
 
         /// <summary>
+        /// 任务执行日志历史表
+        /// </summary>
+        public DbSet<JobExecutionLogHistory> JobExecutionLogHistory { get; set; }
+
+        /// <summary>
         /// 操作日志表
         /// </summary>
         public DbSet<OperationLog> OperationLogs { get; set; }
@@ -38,6 +43,16 @@ namespace HangfireJobsSys.Infrastructure.Data
         /// 审计日志表
         /// </summary>
         public DbSet<AuditLog> AuditLogs { get; set; }
+
+        /// <summary>
+        /// 任务性能数据表（活跃表）
+        /// </summary>
+        public DbSet<JobPerformanceData> JobPerformanceData { get; set; }
+
+        /// <summary>
+        /// 任务性能数据历史表
+        /// </summary>
+        public DbSet<JobPerformanceDataHistory> JobPerformanceDataHistory { get; set; }
 
         /// <summary>
         /// 构造函数
@@ -81,6 +96,39 @@ namespace HangfireJobsSys.Infrastructure.Data
 
             // 配置审计日志表
             modelBuilder.Entity<AuditLog>().ToTable("AuditLogs");
+
+            // 配置任务性能数据表
+            modelBuilder.Entity<JobPerformanceData>().ToTable("JobPerformanceData");
+            modelBuilder.Entity<JobPerformanceData>()
+                .HasIndex(d => d.Timestamp)
+                .HasDatabaseName("IX_JobPerformanceData_Timestamp");
+            modelBuilder.Entity<JobPerformanceData>()
+                .HasIndex(d => d.JobId)
+                .HasDatabaseName("IX_JobPerformanceData_JobId");
+
+            // 配置任务性能数据历史表
+            modelBuilder.Entity<JobPerformanceDataHistory>().ToTable("JobPerformanceData_History");
+            modelBuilder.Entity<JobPerformanceDataHistory>()
+                .HasIndex(d => d.Timestamp)
+                .HasDatabaseName("IX_JobPerformanceData_History_Timestamp");
+            modelBuilder.Entity<JobPerformanceDataHistory>()
+                .HasIndex(d => d.JobId)
+                .HasDatabaseName("IX_JobPerformanceData_History_JobId");
+            modelBuilder.Entity<JobPerformanceDataHistory>()
+                .HasIndex(d => d.MigratedAt)
+                .HasDatabaseName("IX_JobPerformanceData_History_MigratedAt");
+
+            // 配置任务执行日志历史表
+            modelBuilder.Entity<JobExecutionLogHistory>().ToTable("JobExecutionLogs_History");
+            modelBuilder.Entity<JobExecutionLogHistory>()
+                .HasIndex(log => log.ExecutionTime)
+                .HasDatabaseName("IX_JobExecutionLogs_History_ExecutionTime");
+            modelBuilder.Entity<JobExecutionLogHistory>()
+                .HasIndex(log => log.JobId)
+                .HasDatabaseName("IX_JobExecutionLogs_History_JobId");
+            modelBuilder.Entity<JobExecutionLogHistory>()
+                .HasIndex(log => log.MigratedAt)
+                .HasDatabaseName("IX_JobExecutionLogs_History_MigratedAt");
 
             // 配置种子数据（可选）
             // modelBuilder.Entity<Job>().HasData(...);

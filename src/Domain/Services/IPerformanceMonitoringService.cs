@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HangfireJobsSys.Domain.Entities;
+using HangfireJobsSys.Domain.Enums;
+
+using HangfireJobsSys.Domain.Entities;
 
 namespace HangfireJobsSys.Domain.Services
 {
@@ -38,8 +41,51 @@ namespace HangfireJobsSys.Domain.Services
         /// </summary>
         /// <param name="jobId">任务ID</param>
         /// <param name="performanceData">性能数据</param>
-        Task<bool> CheckAlertThresholdsAsync(Guid jobId, JobPerformanceData performanceData);
-    }
+        Task<bool> CheckAlertThresholdsAsync(Guid jobId, Domain.Entities.JobPerformanceData performanceData);
+        
+        /// <summary>
+    /// 获取分页的性能数据列表
+    /// </summary>
+    /// <param name="pageIndex">页码（从0开始）</param>
+    /// <param name="pageSize">每页大小</param>
+    /// <param name="jobId">作业ID（可选）</param>
+    /// <param name="jobName">作业名称（可选）</param>
+    /// <param name="jobType">作业类型（可选）</param>
+    /// <param name="status">执行状态（可选）</param>
+    /// <returns>分页的性能数据</returns>
+    Task<PagedResult<JobPerformanceData>> GetPagedPerformanceDataAsync(
+        int pageIndex,
+        int pageSize,
+        Guid? jobId = null,
+        string jobName = null,
+        string jobType = null,
+        ExecutionStatus? status = null);
+        
+    /// <summary>
+    /// 统一查询性能数据（从当前表和历史表）
+    /// </summary>
+    /// <param name="queryOptions">查询选项</param>
+    /// <returns>查询结果</returns>
+    Task<PagedResult<JobPerformanceData>> GetUnifiedPerformanceDataAsync(
+        PerformanceDataQueryOptions queryOptions);
+}
+
+/// <summary>
+/// 性能数据查询选项
+/// </summary>
+public class PerformanceDataQueryOptions
+{
+    public int PageIndex { get; set; } = 0;
+    public int PageSize { get; set; } = 20;
+    public Guid? JobId { get; set; }
+    public string JobName { get; set; }
+    public string JobType { get; set; }
+    public ExecutionStatus? Status { get; set; }
+    public TimeSpan? TimeRange { get; set; }
+    public bool IncludeHistory { get; set; } = true;
+}
+    
+
     
     /// <summary>
     /// 任务性能统计

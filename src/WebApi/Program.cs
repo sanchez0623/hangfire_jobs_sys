@@ -1,6 +1,7 @@
 using Hangfire;
 using Hangfire.Dashboard;
 using HangfireJobsSys.Infrastructure.Data;
+using HangfireJobsSys.Infrastructure.Extensions;
 using HangfireJobsSys.WebApi.Configurations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -89,6 +90,9 @@ async Task MainAsync(string[] args)
     
     // 配置自定义服务
     builder.Services.ConfigureServices(builder.Configuration);
+    
+    // 注册Infrastructure层的服务
+    builder.Services.AddInfrastructure(builder.Configuration);
 
     var app = builder.Build();
 

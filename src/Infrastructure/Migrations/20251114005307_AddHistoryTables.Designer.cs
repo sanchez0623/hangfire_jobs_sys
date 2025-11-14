@@ -4,6 +4,7 @@ using HangfireJobsSys.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HangfireJobsSys.Infrastructure.Migrations
 {
     [DbContext(typeof(HangfireJobsSysDbContext))]
-    partial class HangfireJobsSysDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251114005307_AddHistoryTables")]
+    partial class AddHistoryTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

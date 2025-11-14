@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using HangfireJobsSys.Domain.Entities;
+using HangfireJobsSys.Domain.Enums;
 
 namespace HangfireJobsSys.Domain.Repositories
 {
